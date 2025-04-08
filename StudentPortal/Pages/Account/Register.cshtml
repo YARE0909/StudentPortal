@@ -1,0 +1,59 @@
+﻿@page
+@model StudentPortal.Pages.Account.RegisterModel
+@{
+}
+
+<h2>Register</h2>
+
+<form method="post">
+    <div>
+        <label asp-for="Input.FirstName"></label>
+        <input asp-for="Input.FirstName" />
+        <span asp-validation-for="Input.FirstName"></span>
+    </div>
+    <div>
+        <label asp-for="Input.LastName"></label>
+        <input asp-for="Input.LastName" />
+        <span asp-validation-for="Input.LastName"></span>
+    </div>
+    <div>
+        <label asp-for="Input.Email"></label>
+        <input asp-for="Input.Email" />
+        <span asp-validation-for="Input.Email"></span>
+    </div>
+    <div>
+        <label asp-for="Input.Password"></label>
+        <input asp-for="Input.Password" type="password" />
+        <span asp-validation-for="Input.Password"></span>
+    </div>
+    <div>
+        <label asp-for="Input.ConfirmPassword"></label>
+        <input asp-for="Input.ConfirmPassword" type="password" />
+        <span asp-validation-for="Input.ConfirmPassword"></span>
+    </div>
+    <div>
+        <label asp-for="Input.Phone"></label>
+        <input asp-for="Input.Phone" />
+        <span asp-validation-for="Input.Phone"></span>
+    </div>
+    <div>
+        <label asp-for="Input.DateOfBirth"></label>
+        <input asp-for="Input.DateOfBirth" type="date" />
+        <span asp-validation-for="Input.DateOfBirth"></span>
+    </div>
+    <div>
+        <label asp-for="Input.Address"></label>
+        <textarea asp-for="Input.Address"></textarea>
+        <span asp-validation-for="Input.Address"></span>
+    </div>
+    <div>
+        <label asp-for="Input.BankDetails"></label>
+        <input asp-for="Input.BankDetails" />
+        <span asp-validation-for="Input.BankDetails"></span>
+    </div>
+    <button type="submit">Register</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

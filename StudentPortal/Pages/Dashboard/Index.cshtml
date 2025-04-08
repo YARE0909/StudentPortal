@@ -1,0 +1,17 @@
+﻿@page
+@model StudentPortal.Pages.Dashboard.IndexModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2>Dashboard</h2>
+
+@if (User.Identity?.IsAuthenticated == true)
+{
+    <p>Welcome, @Model.UserEmail!</p>
+    <p>Your Student ID is: @Model.StudentId</p>
+
+    <form method="post">
+        <button type="submit" asp-page-handler="Logout">Log Out</button>
+    </form>
+}
