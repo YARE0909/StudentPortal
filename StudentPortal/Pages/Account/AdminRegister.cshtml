@@ -1,0 +1,41 @@
+﻿@page
+@model StudentPortal.Pages.Account.AdminRegisterModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Registration - EduSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#121212] flex items-center justify-center min-h-screen font-sans">
+    <div class="bg-[#1E1E1E] p-10 rounded-2xl shadow-lg w-96 text-white">
+        <h2 class="text-2xl font-semibold mb-6 text-center">Admin Registration</h2>
+        <form method="post">
+            <div class="mb-4">
+                <label class="block mb-1">Email</label>
+                <input asp-for="Input.Email" class="w-full p-3 rounded-lg bg-[#2E2E2E] text-white" placeholder="admin@example.com" />
+                <span asp-validation-for="Input.Email" class="text-red-400 text-sm"></span>
+            </div>
+            <div class="mb-4">
+                <label class="block mb-1">Password</label>
+                <input asp-for="Input.Password" type="password" class="w-full p-3 rounded-lg bg-[#2E2E2E] text-white" placeholder="Password" />
+                <span asp-validation-for="Input.Password" class="text-red-400 text-sm"></span>
+            </div>
+            <div class="mb-6">
+                <label class="block mb-1">Role</label>
+                <select asp-for="Input.Role" class="w-full p-3 rounded-lg bg-[#2E2E2E] text-white">
+                    <option value="Admin">Admin</option>
+                    <option value="Staff">Staff</option>
+                </select>
+                <span asp-validation-for="Input.Role" class="text-red-400 text-sm"></span>
+            </div>
+            <button type="submit" class="w-full p-3 bg-fuchsia-500 hover:bg-fuchsia-600 rounded-lg font-semibold transition">Register</button>
+        </form>
+    </div>
+</body>
+</html>
