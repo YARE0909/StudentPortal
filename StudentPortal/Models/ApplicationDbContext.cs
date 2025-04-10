@@ -23,6 +23,7 @@ namespace StudentPortal.Models
         public DbSet<UserAccount> UserAccounts { get; set; }
         public DbSet<Log> Logs { get; set; }
 
+        public DbSet<Admin> Admins { get; set; } // Added Admin DbSet
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // You can configure additional relationships, indexes, etc. here.
