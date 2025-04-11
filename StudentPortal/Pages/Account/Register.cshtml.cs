@@ -80,7 +80,7 @@ namespace StudentPortal.Pages.Account
 
             // Here you would hash the password. For demonstration, we store it directly.
             // In production, use a secure hashing library (e.g., BCrypt).
-            var student = new Student
+            var student = new StudentPortal.Models.Student
             {
                 FirstName = Input.FirstName,
                 LastName = Input.LastName,

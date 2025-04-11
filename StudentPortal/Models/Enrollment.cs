@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudentPortal.Models
 {
@@ -17,7 +15,6 @@ namespace StudentPortal.Models
         [Required]
         public int CourseId { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime EnrollmentDate { get; set; }
 
         [Required]

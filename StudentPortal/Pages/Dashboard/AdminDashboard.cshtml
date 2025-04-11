@@ -1,0 +1,48 @@
+﻿@page
+@model StudentPortal.Pages.Dashboard.AdminDashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="min-h-screen bg-[#1A1A1A] text-white">
+    <header class="bg-[#292929] p-6 shadow-md flex justify-between items-center">
+        <div>
+            <h1 class="text-4xl font-bold">Admin Dashboard</h1>
+            <p class="text-sm text-gray-300">Welcome, @Model.AdminEmail!</p>
+        </div>
+    </header>
+
+    <main class="pt-6">
+        <h2 class="text-2xl font-semibold mb-6">Dashboard Overview</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-[#292929] p-4 rounded shadow">
+                <h3 class="text-xl font-bold">Total Students</h3>
+                <p class="text-3xl">@Model.StudentCount</p>
+            </div>
+            <div class="bg-[#292929] p-4 rounded shadow">
+                <h3 class="text-xl font-bold">Total Courses</h3>
+                <p class="text-3xl">@Model.CourseCount</p>
+            </div>
+            <div class="bg-[#292929] p-4 rounded shadow">
+                <h3 class="text-xl font-bold">Total Payments</h3>
+                <p class="text-3xl">@Model.PaymentCount</p>
+            </div>
+            <div class="bg-[#292929] p-4 rounded shadow">
+                <h3 class="text-xl font-bold">Total Enrollments</h3>
+                <p class="text-3xl">@Model.EnrollmentCount</p>
+            </div>
+            <div class="bg-[#292929] p-4 rounded shadow">
+                <h3 class="text-xl font-bold">Total Enquiries</h3>
+                <p class="text-3xl">@Model.EnquiryCount</p>
+            </div>
+            <div class="bg-[#292929] p-4 rounded shadow">
+                <h3 class="text-xl font-bold">Total Invoices</h3>
+                <p class="text-3xl">@Model.InvoiceCount</p>
+            </div>
+            <div class="bg-[#292929] p-4 rounded shadow md:col-span-3">
+                <h3 class="text-xl font-bold">Total Revenue</h3>
+                <p class="text-3xl">@Model.TotalRevenue.ToString("C", new System.Globalization.CultureInfo("ms-MY"))</p>
+            </div>
+        </div>
+    </main>
+</div>

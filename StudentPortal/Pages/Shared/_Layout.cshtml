@@ -19,14 +19,49 @@
     <header class="bg-[#292929] text-white py-4 px-6">
         <div class="container mx-auto flex justify-between items-center">
             <a class="text-xl font-bold text-white hover:text-fuchsia-400 transition" asp-area="" asp-page="/Index">
-                GroupAssignmentStudentRegistration
+                EduSphere
             </a>
             <nav class="space-x-6 hidden sm:block">
-                <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Index">Home</a>
-                <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Privacy">Privacy</a>
+                @if (User?.Identity != null && User.Identity.IsAuthenticated)
+                {
+                    if (User.IsInRole("Admin"))
+                    {
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Dashboard/AdminDashboard">Admin Dashboard</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/ManageInvoices">Manage Invoices</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/ManageStudents">Manage Students</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/ManageCourses">Manage Courses</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/ManageTimetable">Manage Timetable</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/ManageEnrollments">Manage Enrollments</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/CourseEvaluations">View Evaluations</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Admin/ManageEnquiries">Enquiries</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-page="/Account/AdminLogout">Logout</a>
+                    }
+                    else
+                    {
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/Dashboard">Dashboard</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/EnrollCourses">Enroll Courses</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/ViewTimetable">Timetable</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Payments/MakePayment">Make Payment</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Payments/PaymentHistory">Payment History</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/AddDropHistory">Add/Drop History</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/EvaluateCourse">Evaluate Course</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/MakeEnquiry">Contact Us</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Student/Profile">Profile</a>
+                        <a class="hover:text-fuchsia-400 transition" asp-page="/Account/StudentLogout">Logout</a>
+                    }
+                }
+                else
+                {
+                    <!-- User is not logged in -->
+                    <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Index">Home</a>
+                    <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Privacy">Privacy</a>
+                    <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Account/Login">Login</a>
+                    <a class="hover:text-fuchsia-400 transition" asp-area="" asp-page="/Account/Register">Register</a>
+                }
             </nav>
         </div>
     </header>
+
 
     <!-- Main Content -->
     <main class="flex-grow container mx-auto px-4 py-8">
@@ -35,8 +70,7 @@
 
     <!-- Footer -->
     <footer class="bg-[#292929] text-sm text-gray-400 py-4 text-center">
-        &copy; 2025 - GroupAssignmentStudentRegistration -
-        <a asp-area="" asp-page="/Privacy" class="hover:text-fuchsia-400 transition">Privacy</a>
+        &copy; 2025 - EduSphere
     </footer>
 
     <!-- Scripts -->

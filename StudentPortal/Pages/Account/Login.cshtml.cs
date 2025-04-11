@@ -20,7 +20,7 @@ namespace StudentPortal.Pages.Account
         [BindProperty]
         public InputModel Input { get; set; }
 
-        public string ReturnUrl { get; set; } = "/Dashboard/Index";
+        public string ReturnUrl { get; set; } = "/Student/Dashboard";
 
         public class InputModel
         {

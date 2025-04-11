@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudentPortal.Models
 {
@@ -18,7 +16,6 @@ namespace StudentPortal.Models
         [DataType(DataType.Currency)]
         public decimal Amount { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime PaymentDate { get; set; }
 
         [Required]

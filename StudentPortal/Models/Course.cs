@@ -29,7 +29,6 @@ namespace StudentPortal.Models
         [Required]
         public int CourseCost { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime CreatedAt { get; set; }
     }
 }

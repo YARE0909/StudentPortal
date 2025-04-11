@@ -24,7 +24,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("ActionDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("ActionType")
@@ -91,7 +90,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("CreditHours")
@@ -118,7 +116,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Message")
@@ -154,7 +151,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("EnrollmentDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -188,7 +184,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("IssueDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("Status")
@@ -204,31 +199,6 @@ namespace StudentPortal.Migrations
                     b.ToTable("Invoices");
                 });
 
-            modelBuilder.Entity("StudentPortal.Models.Log", b =>
-                {
-                    b.Property<int>("LogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Action")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Timestamp")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("LogId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Logs");
-                });
-
             modelBuilder.Entity("StudentPortal.Models.Payment", b =>
                 {
                     b.Property<int>("PaymentId")
@@ -239,7 +209,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("PaymentDate")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("PaymentMethod")
@@ -351,7 +320,6 @@ namespace StudentPortal.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAddOrUpdate()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Feedback")
@@ -371,34 +339,6 @@ namespace StudentPortal.Migrations
                     b.HasIndex("StudentId");
 
                     b.ToTable("StudentEvaluations");
-                });
-
-            modelBuilder.Entity("StudentPortal.Models.StudentStatement", b =>
-                {
-                    b.Property<int>("StatementId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("BalanceDue")
-                        .HasColumnType("TEXT");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<decimal>("PaidAmount")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("TotalFees")
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("StatementId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentStatements");
                 });
 
             modelBuilder.Entity("StudentPortal.Models.Timetable", b =>
@@ -429,31 +369,6 @@ namespace StudentPortal.Migrations
                     b.HasIndex("CourseId");
 
                     b.ToTable("Timetables");
-                });
-
-            modelBuilder.Entity("StudentPortal.Models.UserAccount", b =>
-                {
-                    b.Property<int>("AccountId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("LastPasswordUpdate")
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("AccountId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("UserAccounts");
                 });
 
             modelBuilder.Entity("StudentPortal.Models.AddDropHistory", b =>
@@ -516,17 +431,6 @@ namespace StudentPortal.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("StudentPortal.Models.Log", b =>
-                {
-                    b.HasOne("StudentPortal.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("StudentPortal.Models.Payment", b =>
                 {
                     b.HasOne("StudentPortal.Models.Student", "Student")
@@ -576,17 +480,6 @@ namespace StudentPortal.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("StudentPortal.Models.StudentStatement", b =>
-                {
-                    b.HasOne("StudentPortal.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("StudentPortal.Models.Timetable", b =>
                 {
                     b.HasOne("StudentPortal.Models.Course", "Course")
@@ -596,17 +489,6 @@ namespace StudentPortal.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("StudentPortal.Models.UserAccount", b =>
-                {
-                    b.HasOne("StudentPortal.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
                 });
 #pragma warning restore 612, 618
         }

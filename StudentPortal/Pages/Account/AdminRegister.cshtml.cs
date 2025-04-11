@@ -43,7 +43,7 @@ namespace StudentPortal.Pages.Account
                 return Page();
             }
 
-            var admin = new Admin
+            var admin = new StudentPortal.Models.Admin
             {
                 Email = Input.Email,
                 PasswordHash = Input.Password, // Store plain-text password (NOT recommended for production)

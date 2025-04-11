@@ -16,14 +16,10 @@ namespace StudentPortal.Models
         public DbSet<Enquiry> Enquiries { get; set; }
         public DbSet<Timetable> Timetables { get; set; }
         public DbSet<StudentEvaluation> StudentEvaluations { get; set; }
-        public DbSet<StudentStatement> StudentStatements { get; set; }
         public DbSet<Payment> Payments { get; set; }
         public DbSet<PaymentHistory> PaymentHistories { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
-        public DbSet<UserAccount> UserAccounts { get; set; }
-        public DbSet<Log> Logs { get; set; }
-
-        public DbSet<Admin> Admins { get; set; } // Added Admin DbSet
+        public DbSet<Admin> Admins { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             // You can configure additional relationships, indexes, etc. here.

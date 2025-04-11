@@ -1,23 +1,31 @@
 ﻿@page
 @model StudentPortal.Pages.Account.LoginModel
 @{
+    ViewData["Title"] = "Login";
 }
 
-<h2>Login</h2>
-
-<form method="post">
-    <div>
-        <label asp-for="Input.Email"></label>
-        <input asp-for="Input.Email" />
-        <span asp-validation-for="Input.Email"></span>
+<div class="min-h-screen flex items-center justify-center bg-[#1A1A1A]">
+    <div class="bg-[#292929] rounded-lg shadow-lg p-8 w-full max-w-md">
+        <h2 class="text-3xl font-bold text-white mb-6 text-center">Login</h2>
+        <form method="post" class="space-y-4">
+            <div>
+                <label asp-for="Input.Email" class="block text-white font-medium mb-1"></label>
+                <input asp-for="Input.Email"
+                       class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="Input.Email" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="Input.Password" class="block text-white font-medium mb-1"></label>
+                <input asp-for="Input.Password" type="password"
+                       class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="Input.Password" class="text-red-400 text-sm"></span>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                Login
+            </button>
+        </form>
     </div>
-    <div>
-        <label asp-for="Input.Password"></label>
-        <input asp-for="Input.Password" type="password" />
-        <span asp-validation-for="Input.Password"></span>
-    </div>
-    <button type="submit">Login</button>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

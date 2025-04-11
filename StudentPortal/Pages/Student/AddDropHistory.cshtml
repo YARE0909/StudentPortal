@@ -1,0 +1,37 @@
+﻿@page
+@model StudentPortal.Pages.Student.AddDropHistoryModel
+@{
+    ViewData["Title"] = "Course Add/Drop History";
+}
+
+<div class="bg-[#1A1A1A] text-white p-8">
+    <h2 class="text-3xl font-bold text-white mb-6 text-start">Course Add/Drop History</h2>
+    <div class="mx-auto overflow-auto">
+        @if (Model.HistoryItems.Any())
+        {
+            <table class="min-w-full divide-y divide-gray-600">
+                <thead class="bg-[#3C3C3C]">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Action</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-white uppercase tracking-wider">Course</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-[#1A1A1A] divide-y divide-gray-700">
+                    @foreach (var item in Model.HistoryItems)
+                    {
+                        <tr class="hover:bg-[#2a2a2a] transition">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">@item.ActionDate.ToString("g")</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">@item.ActionType</td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">@item.Course?.CourseName (@item.Course?.CourseCode)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-center text-gray-400">No add/drop history available.</p>
+        }
+    </div>
+</div>

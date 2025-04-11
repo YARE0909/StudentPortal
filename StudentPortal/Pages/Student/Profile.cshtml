@@ -1,0 +1,68 @@
+﻿@page
+@model StudentPortal.Pages.Student.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="min-h-screen bg-[#1A1A1A] text-white p-8 flex items-center justify-center">
+    <div class="bg-[#292929] rounded-lg shadow-lg p-8 w-full max-w-lg">
+        <h1 class="text-4xl font-bold text-center mb-6">My Profile</h1>
+
+        @if (TempData["Message"] != null)
+        {
+            <div class="mb-6 p-4 rounded bg-green-600 text-white font-semibold text-center">
+                @TempData["Message"]
+            </div>
+        }
+
+        <form method="post" class="space-y-4">
+            <div>
+                <label asp-for="StudentInput.FirstName" class="block text-white font-medium mb-1">First Name</label>
+                <input asp-for="StudentInput.FirstName" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.FirstName" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.LastName" class="block text-white font-medium mb-1">Last Name</label>
+                <input asp-for="StudentInput.LastName" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.LastName" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.Email" class="block text-white font-medium mb-1">Email</label>
+                <input asp-for="StudentInput.Email" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.Email" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.PasswordHash" class="block text-white font-medium mb-1">Password</label>
+                <input asp-for="StudentInput.PasswordHash" type="password" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.PasswordHash" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.Phone" class="block text-white font-medium mb-1">Phone</label>
+                <input asp-for="StudentInput.Phone" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.Phone" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.DateOfBirth" class="block text-white font-medium mb-1">Date of Birth</label>
+                <input asp-for="StudentInput.DateOfBirth" type="date" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.DateOfBirth" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.Address" class="block text-white font-medium mb-1">Address</label>
+                <textarea asp-for="StudentInput.Address" rows="3" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400"></textarea>
+                <span asp-validation-for="StudentInput.Address" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="StudentInput.BankDetails" class="block text-white font-medium mb-1">Bank Details</label>
+                <input asp-for="StudentInput.BankDetails" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" />
+                <span asp-validation-for="StudentInput.BankDetails" class="text-red-400 text-sm"></span>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                Save Changes
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

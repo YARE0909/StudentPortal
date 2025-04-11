@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudentPortal.Models
 {
@@ -20,7 +18,6 @@ namespace StudentPortal.Models
         [Required]
         public ActionType ActionType { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime ActionDate { get; set; }
 
         // Navigation properties

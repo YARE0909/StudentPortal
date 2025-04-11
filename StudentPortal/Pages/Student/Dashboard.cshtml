@@ -1,0 +1,100 @@
+﻿@page
+@model StudentPortal.Pages.Student.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="min-h-screen text-white p-8">
+    <header class="mb-10 text-center">
+        <h1 class="text-5xl font-extrabold tracking-wide">Welcome, @Model.Student.FirstName @Model.Student.LastName!</h1>
+    </header>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+        <div class="bg-[#292929] rounded-xl shadow-lg p-6 transform transition duration-300 hover:scale-105">
+            <h2 class="text-2xl font-bold mb-3">Total Fees</h2>
+            <p class="text-3xl font-extrabold">@Model.TotalFees.ToString("C", new System.Globalization.CultureInfo("ms-MY"))</p>
+        </div>
+        <div class="bg-[#292929] rounded-xl shadow-lg p-6 transform transition duration-300 hover:scale-105">
+            <h2 class="text-2xl font-bold mb-3">Paid</h2>
+            <p class="text-3xl font-extrabold text-green-400">@Model.TotalPaid.ToString("C", new System.Globalization.CultureInfo("ms-MY"))</p>
+        </div>
+        <div class="bg-[#292929] rounded-xl shadow-lg p-6 transform transition duration-300 hover:scale-105">
+            <h2 class="text-2xl font-bold mb-3">Pending</h2>
+            <p class="text-3xl font-extrabold text-red-400">@Model.BalanceDue.ToString("C", new System.Globalization.CultureInfo("ms-MY"))</p>
+        </div>
+    </section>
+
+    <section class="mb-12">
+        <h2 class="text-3xl font-bold mb-6 text-center">Enrolled Courses</h2>
+        <div class="bg-[#292929] rounded-xl shadow-lg p-6">
+            @if (Model.Enrollments.Any())
+            {
+                <ul class="space-y-2 list-disc list-inside">
+                    @foreach (var enrollment in Model.Enrollments)
+                    {
+                        <li class="py-1">
+                            <span class="font-semibold text-lg">@enrollment.Course.CourseName</span>
+                            <span class="text-gray-400">(@enrollment.Course.CourseCode)</span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-center text-gray-400">No enrollments found.</p>
+            }
+        </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div class="bg-[#292929] rounded-xl shadow-lg p-6">
+            <h2 class="text-3xl font-bold mb-6 text-center">Recent Invoices</h2>
+            @if (Model.Invoices.Any())
+            {
+                <ul class="divide-y divide-gray-700">
+                    @foreach (var invoice in Model.Invoices.Take(5))
+                    {
+                        <li class="py-4 flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-lg">@invoice.FinalAmount.ToString("C", new System.Globalization.CultureInfo("ms-MY"))</p>
+                                <p class="text-sm text-gray-400">@invoice.IssueDate.ToShortDateString()</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-blue-500 text-white uppercase text-xs font-bold">
+                                @invoice.Status
+                            </span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-center text-gray-400">No invoices available.</p>
+            }
+        </div>
+
+        <div class="bg-[#292929] rounded-xl shadow-lg p-6">
+            <h2 class="text-3xl font-bold mb-6 text-center">Student Statement</h2>
+            @if (Model.Payments.Any())
+            {
+                <ul class="divide-y divide-gray-700">
+                    @foreach (var payment in Model.Payments.Take(5))
+                    {
+                        <li class="py-4 flex justify-between items-center">
+                            <div>
+                                <p class="font-semibold text-lg">@payment.Amount.ToString("C", new System.Globalization.CultureInfo("ms-MY"))</p>
+                                <p class="text-sm text-gray-400">@payment.PaymentDate.ToShortDateString()</p>
+                            </div>
+                            <span class="px-3 py-1 rounded-full bg-green-500 text-white uppercase text-xs font-bold">
+                                @payment.PaymentMethod
+                            </span>
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-center text-gray-400">No payment history found.</p>
+            }
+        </div>
+    </section>
+</div>

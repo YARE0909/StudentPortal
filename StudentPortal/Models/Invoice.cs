@@ -1,6 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StudentPortal.Models
 {
@@ -28,7 +26,6 @@ namespace StudentPortal.Models
         [Required]
         public InvoiceStatus Status { get; set; } = InvoiceStatus.Pending;
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime IssueDate { get; set; }
 
         // Navigation property

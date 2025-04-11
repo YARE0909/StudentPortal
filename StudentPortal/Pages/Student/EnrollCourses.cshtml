@@ -1,0 +1,73 @@
+﻿@page
+@model StudentPortal.Pages.Student.EnrollCoursesModel
+@{
+    ViewData["Title"] = "Enroll in Courses";
+}
+
+<div class="bg-[#1A1A1A] text-white p-8">
+    <h1 class="text-4xl font-bold text-center mb-8">Enroll in Courses</h1>
+
+    @if (TempData["Message"] != null)
+    {
+        <div class="mb-6 p-4 rounded bg-green-600 text-white font-semibold text-center">
+            @TempData["Message"]
+        </div>
+    }
+
+    <!-- Available Courses Section -->
+    @if (Model.AvailableCourses.Any())
+    {
+        <h2 class="text-3xl font-bold mb-4">Available Courses</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            @foreach (var course in Model.AvailableCourses)
+            {
+                <div class="bg-[#292929] rounded-xl shadow-lg p-6 flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-2">@course.CourseName</h2>
+                        <p class="text-gray-300 mb-1"><strong>Code:</strong> @course.CourseCode</p>
+                        <p class="text-gray-300 mb-1"><strong>Department:</strong> @course.Department</p>
+                        <p class="text-gray-300 mb-2"><strong>Credit Hours:</strong> @course.CreditHours</p>
+                        <p class="text-gray-400 text-sm">@course.Description</p>
+                    </div>
+                    <form method="post" asp-page-handler="Enroll" class="mt-4">
+                        <input type="hidden" name="courseId" value="@course.CourseId" />
+                        <button type="submit"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                            Enroll
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-gray-400 mb-12">You are already enrolled in all available courses.</p>
+    }
+
+    <!-- Enrolled Courses Section -->
+    <h2 class="text-3xl font-bold mb-4">Your Enrolled Courses</h2>
+    @if (Model.EnrolledCourses.Any())
+    {
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach (var course in Model.EnrolledCourses)
+            {
+                <div class="bg-[#292929] rounded-xl shadow-lg p-6">
+                    <h2 class="text-2xl font-bold mb-2">@course.CourseName</h2>
+                    <p class="text-gray-300 mb-1"><strong>Code:</strong> @course.CourseCode</p>
+                    <p class="text-gray-300 mb-1"><strong>Department:</strong> @course.Department</p>
+                    <p class="text-gray-300 mb-2"><strong>Credit Hours:</strong> @course.CreditHours</p>
+                    <p class="text-gray-400 text-sm">@course.Description</p>
+                </div>
+            }
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-gray-400">You are not enrolled in any courses yet.</p>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

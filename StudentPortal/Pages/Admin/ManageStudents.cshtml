@@ -1,0 +1,92 @@
+﻿@page
+@model StudentPortal.Pages.Admin.ManageStudentsModel
+@{
+    ViewData["Title"] = "Manage Students";
+}
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-white">
+    <div>
+        <h2 class="text-2xl font-semibold mb-4">Manage Students</h2>
+        <table class="min-w-full bg-[#1A1A1A] rounded-lg shadow">
+            <thead>
+                <tr class="bg-[#292929] text-left">
+                    <th class="p-3">Name</th>
+                    <th class="p-3">Email</th>
+                    <th class="p-3">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var student in Model.Students)
+                {
+                    <tr class="border-t border-[#3C3C3C] hover:bg-[#252525] transition">
+                        <td class="p-3">@student.FirstName @student.LastName</td>
+                        <td class="p-3">@student.Email</td>
+                        <td class="p-3">
+                            <form method="post" asp-page-handler="DeleteStudent" asp-route-id="@student.StudentId" class="inline" onsubmit="return confirm('Are you sure?');">
+                                <button type="submit" class="text-red-400 hover:underline">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="bg-[#292929] p-6 rounded-lg shadow">
+        <h3 class="text-xl font-bold mb-4">Add New Student</h3>
+        <form method="post" asp-page-handler="AddStudent" class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label asp-for="NewStudent.FirstName" class="block font-medium">First Name</label>
+                    <input asp-for="NewStudent.FirstName" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                    <span asp-validation-for="NewStudent.FirstName" class="text-red-400 text-sm"></span>
+                </div>
+                <div>
+                    <label asp-for="NewStudent.LastName" class="block font-medium">Last Name</label>
+                    <input asp-for="NewStudent.LastName" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                    <span asp-validation-for="NewStudent.LastName" class="text-red-400 text-sm"></span>
+                </div>
+            </div>
+            <div>
+                <label asp-for="NewStudent.Email" class="block font-medium">Email</label>
+                <input asp-for="NewStudent.Email" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                <span asp-validation-for="NewStudent.Email" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="NewStudent.Password" class="block font-medium">Password</label>
+                <input asp-for="NewStudent.Password" type="password" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                <span asp-validation-for="NewStudent.Password" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="NewStudent.Phone" class="block font-medium">Phone</label>
+                <input asp-for="NewStudent.Phone" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                <span asp-validation-for="NewStudent.Phone" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="NewStudent.DateOfBirth" class="block font-medium">Date of Birth</label>
+                <input asp-for="NewStudent.DateOfBirth" type="date" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                <span asp-validation-for="NewStudent.DateOfBirth" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="NewStudent.Address" class="block font-medium">Address</label>
+                <textarea asp-for="NewStudent.Address" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3"></textarea>
+                <span asp-validation-for="NewStudent.Address" class="text-red-400 text-sm"></span>
+            </div>
+            <div>
+                <label asp-for="NewStudent.BankDetails" class="block font-medium">Bank Details</label>
+                <input asp-for="NewStudent.BankDetails" class="w-full bg-[#1A1A1A] text-white border border-gray-600 rounded py-2 px-3" />
+                <span asp-validation-for="NewStudent.BankDetails" class="text-red-400 text-sm"></span>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    Add Student
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
