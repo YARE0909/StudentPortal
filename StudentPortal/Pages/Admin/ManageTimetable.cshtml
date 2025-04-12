@@ -77,19 +77,38 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block font-medium mb-1">Start Time</label>
-                            <input asp-for="NewEntry.StartTime" type="time" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" />
+                            <select asp-for="NewEntry.StartTime" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" id="start-time-dropdown">
+                                @for (int hour = 8; hour <= 18; hour++)
+                                {
+                                    <option value="@hour">@hour:00</option>
+                                }
+                            </select>
                         </div>
+
                         <div>
+                            <label class="block font-medium mb-1">Duration (hours)</label>
+                            <select asp-for="NewEntry.Duration" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" id="duration-dropdown">
+                                <option value="1">1 hour</option>
+                                <option value="2">2 hours</option>
+                                <option value="3">3 hours</option>
+                                <option value="4">4 hours</option>
+                                <option value="5">5 hours</option>
+                                <option value="6">6 hours</option>
+                            </select>
+                        </div>
+
+                        <div class="col-span-2">
                             <label class="block font-medium mb-1">End Time</label>
-                            <input asp-for="NewEntry.EndTime" type="time" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" />
+                            <input type="text" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" id="end-time" readonly />
+                        </div>
+
+                        <div class="col-span-2">
+                            <label class="block font-medium mb-1">Room Number</label>
+                            <input type="text" asp-for="NewEntry.RoomNumber" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" />
                         </div>
                     </div>
 
-                    <div>
-                        <label class="block font-medium mb-1">Room Number</label>
-                        <input asp-for="NewEntry.RoomNumber" class="w-full bg-[#3C3C3C] border border-gray-600 rounded p-2" />
-                    </div>
-
+                        
                     <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 rounded transition">
                         Add Entry
                     </button>
@@ -98,3 +117,46 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Client-side validation for Start Time < End Time
+        document.querySelector("form").addEventListener("submit", function (event) {
+            const startTime = document.querySelector("input[name='NewEntry.StartTime']").value;
+            const endTime = document.querySelector("input[name='NewEntry.EndTime']").value;
+
+            if (startTime && endTime && startTime >= endTime) {
+                event.preventDefault();
+                alert("Start Time must be earlier than End Time.");
+            }
+        });
+
+        
+ 
+        // Function to calculate the end time based on selected start time and duration
+        function calculateEndTime() {
+            var startTime = document.getElementById("start-time-dropdown").value;
+            var duration = document.getElementById("duration-dropdown").value;
+
+            if (startTime && duration) {
+                // Calculate the end time
+                var endTime = parseInt(startTime) + parseInt(duration);
+
+                // Check if the end time exceeds 6 PM (18)
+                if (endTime > 18) {
+                    alert("Class cannot end after 6 PM.");
+                    endTime = 18; // Set to 6 PM if the calculated end time exceeds
+                }
+
+                // Display the end time in 24-hour format
+                document.getElementById("end-time").value = endTime + ":00";
+            }
+        }
+
+        // Event listeners for start time and duration dropdowns
+        document.getElementById("start-time-dropdown").addEventListener("change", calculateEndTime);
+        document.getElementById("duration-dropdown").addEventListener("change", calculateEndTime);
+ 
+
+    </script>
+}
