@@ -30,5 +30,7 @@ namespace StudentPortal.Models
         public int CourseCost { get; set; }
 
         public DateTime CreatedAt { get; set; }
+
+        public List<Timetable> Timetables { get; set; } // This links to Timetable
     }
 }
