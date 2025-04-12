@@ -1,5 +1,5 @@
 ﻿@page
-@model StudentPortal.Pages.Student.ViewTimetableModel
+@model StudentPortal.Pages.Admin.TimetableMatchingcshtmlModel
 @{
     ViewData["Title"] = "Weekly Timetable";
 
@@ -12,8 +12,12 @@
         .Distinct()
         .OrderBy(e => e.StartTime)
         .ToList();
-}
 
+    var conflicts = Model.TimetableEntries
+        .GroupBy(e => new { e.DayOfWeek, e.StartTime, e.EndTime })
+        .Where(g => g.Count() > 1)
+        .ToDictionary(g => g.Key, g => g.ToList());
+}
 <div class="bg-[#1A1A1A] p-8">
     <h2 class="text-3xl font-bold text-white mb-6 text-start">Timetable</h2>
     <div class="overflow-auto">
@@ -44,13 +48,13 @@
                             e.EndTime == slot.EndTime)
                             .ToList();
 
-                            var isConflict = entries.Count > 1;
-                            <td class="px-4 py-3 text-center border border-[#3C3C3C] @(isConflict ? "bg-red-600" : "bg-[#1A1A1A]")">
+                            <td class="px-4 py-3 text-center border border-[#3C3C3C] bg-[#1A1A1A]">
                                 @if (entries.Any())
                                 {
                                     foreach (var entry in entries)
                                     {
-                                        <div class="mb-1">
+                                        var isConflict = entries.Count > 1;
+                                        <div class="mb-1 p-1 rounded @((isConflict ? "bg-red-600" : "bg-gray-700"))">
                                             <span class="block font-bold">@entry.Course.CourseName</span>
                                             <span class="block text-xs text-gray-300">@entry.RoomNumber</span>
                                         </div>
