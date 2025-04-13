@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentPortal.Models;
 
@@ -10,9 +11,11 @@ using StudentPortal.Models;
 namespace StudentPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250413084858_hasenrolled")]
+    partial class hasenrolled
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -388,44 +391,6 @@ namespace StudentPortal.Migrations
                     b.ToTable("Timetables");
                 });
 
-            modelBuilder.Entity("StudentPortal.Models.TimetableConflictReport", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("DateSubmitted")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("IsNoted")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("PreferredCourse")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PreferredDay")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("PreferredTimeSlot")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("Remarks")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.Property<int>("StudentId")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("TimetableConflictReports");
-                });
-
             modelBuilder.Entity("StudentPortal.Models.AddDropHistory", b =>
                 {
                     b.HasOne("StudentPortal.Models.Course", "Course")
@@ -544,17 +509,6 @@ namespace StudentPortal.Migrations
                         .IsRequired();
 
                     b.Navigation("Course");
-                });
-
-            modelBuilder.Entity("StudentPortal.Models.TimetableConflictReport", b =>
-                {
-                    b.HasOne("StudentPortal.Models.Student", "Student")
-                        .WithMany()
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Student");
                 });
 
             modelBuilder.Entity("StudentPortal.Models.Course", b =>

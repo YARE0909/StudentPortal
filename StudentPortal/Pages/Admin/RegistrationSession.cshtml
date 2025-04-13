@@ -72,9 +72,11 @@
         @if (TempData["Message"] != null)
         {
             <text>
-                    document.getElementById('alert-message').textContent = '@TempData["Message"]';
-                    document.getElementById('alert-message').className = 'alert-message alert-success';
-                    document.getElementById('alert-message').style.display = 'block';
+                    // Show the success or error message based on TempData
+                    var alertMessage = document.getElementById('alert-message');
+                    alertMessage.textContent = '@TempData["Message"]';
+                    alertMessage.classList.add('alert-success');
+                    alertMessage.style.display = 'block';
             </text>
         }
     </script>

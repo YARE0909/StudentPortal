@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.Models;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -20,35 +19,27 @@ namespace StudentPortal.Pages.Admin
         [BindProperty]
         public bool IsActive { get; set; }
 
+        // OnGet is used to check the current registration period status
         public void OnGet()
         {
-            var period = _context.RegistrationPeriods.FirstOrDefault(r => r.Id == 1);
-
-            if (period != null)
-            {
-                IsActive = period.IsActive;
-            }
-            else
-            {
-                IsActive = false;
-            }
+            var period = _context.RegistrationPeriods.FirstOrDefault(r => r.IsActive);
+            IsActive = period != null && period.IsActive;
         }
 
+        // OnPost is used to handle the form submission for opening/closing the session
         public async Task<IActionResult> OnPostAsync()
         {
             if (ModelState.IsValid)
             {
-                // Try to get the existing record (assumes only one)
                 var existingPeriod = await _context.RegistrationPeriods.FirstOrDefaultAsync();
 
+                // If an existing period is found, update it. Otherwise, create a new one.
                 if (existingPeriod != null)
                 {
-                    // Update existing entry
                     existingPeriod.IsActive = IsActive;
                 }
                 else
                 {
-                    // Create new entry if none exists
                     var newPeriod = new RegistrationPeriod
                     {
                         IsActive = IsActive
@@ -56,17 +47,26 @@ namespace StudentPortal.Pages.Admin
                     _context.RegistrationPeriods.Add(newPeriod);
                 }
 
-                // Save changes
+                // If the session is opened, reset the enrollment flags for all students
+                if (IsActive)
+                {
+                    var students = await _context.Students.ToListAsync();
+                    foreach (var student in students)
+                    {
+                        student.HasEnrolledThisSession = false; // Reset enrollment status
+                    }
+                    _context.Students.UpdateRange(students);
+                }
+
+                // Save changes to the database
                 await _context.SaveChangesAsync();
 
+                // Set a success message
                 TempData["Message"] = $"Registration session has been {(IsActive ? "opened" : "closed")}.";
-                return RedirectToPage();
+                return RedirectToPage(); // Redirect to refresh the page and show the message
             }
 
-            return Page();
+            return Page(); // Return the current page in case of validation failure
         }
-
     }
-
 }
-

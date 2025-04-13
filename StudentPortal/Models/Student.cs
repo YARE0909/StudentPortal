@@ -35,6 +35,8 @@ namespace StudentPortal.Models
 
         public string BankDetails { get; set; }
 
+        public bool HasEnrolledThisSession { get; set; } = false;
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime? CreatedAt { get; set; }
     }

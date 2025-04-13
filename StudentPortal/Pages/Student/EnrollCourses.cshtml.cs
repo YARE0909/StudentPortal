@@ -18,7 +18,7 @@ namespace StudentPortal.Pages.Student
 
         public List<Course> AvailableCourses { get; set; } = new();
         public List<Course> EnrolledCourses { get; set; } = new();
-        public bool IsRegistrationOpen { get; set; } // Flag to check if registration is open
+        public bool IsRegistrationOpen { get; set; }
 
         [BindProperty]
         public List<int> SelectedCourseIds { get; set; } = new();
@@ -27,12 +27,13 @@ namespace StudentPortal.Pages.Student
         {
             int studentId = GetCurrentStudentId();
 
-            // Check if registration period is open
+            var student = await _context.Students.FindAsync(studentId);
+
             var registrationPeriod = await _context.RegistrationPeriods
                 .Where(r => r.IsActive)
                 .FirstOrDefaultAsync();
 
-            IsRegistrationOpen = registrationPeriod != null && registrationPeriod.IsActive;
+            IsRegistrationOpen = registrationPeriod != null && registrationPeriod.IsActive && student != null && !student.HasEnrolledThisSession;
 
             EnrolledCourses = await _context.Enrollments
                 .Where(e => e.StudentId == studentId && e.Status == EnrollmentStatus.Enrolled)
@@ -42,8 +43,8 @@ namespace StudentPortal.Pages.Student
 
             if (!IsRegistrationOpen)
             {
-                TempData["Message"] = "The registration session is closed. You cannot enroll in courses.";
-                return; // End method if registration is closed
+                TempData["Message"] = "You have already enrolled for this session or registration is closed.";
+                return;
             }
 
             var allCourses = await _context.Courses.ToListAsync();
@@ -54,28 +55,23 @@ namespace StudentPortal.Pages.Student
                 .ToListAsync();
 
             AvailableCourses = allCourses.Where(c => !enrolledCourseIds.Contains(c.CourseId)).ToList();
-
-            
         }
 
         public async Task<IActionResult> OnPostEnrollAsync()
         {
             int studentId = GetCurrentStudentId();
 
-            // Check if registration period is open
+            var student = await _context.Students.FindAsync(studentId);
+
             var registrationPeriod = await _context.RegistrationPeriods
                 .Where(r => r.IsActive)
                 .FirstOrDefaultAsync();
 
-            if (registrationPeriod == null || !registrationPeriod.IsActive)
+            if (registrationPeriod == null || !registrationPeriod.IsActive || student == null || student.HasEnrolledThisSession)
             {
-                TempData["Message"] = "The registration session is closed. You cannot enroll in courses.";
+                TempData["Message"] = "You have already enrolled for this session or registration is closed.";
                 return RedirectToPage();
             }
-
-            // Get how many courses the student is already enrolled in
-            var alreadyEnrolledCount = await _context.Enrollments
-                .CountAsync(e => e.StudentId == studentId && e.Status == EnrollmentStatus.Enrolled);
 
             if (SelectedCourseIds == null || !SelectedCourseIds.Any())
             {
@@ -83,20 +79,21 @@ namespace StudentPortal.Pages.Student
                 return RedirectToPage();
             }
 
-            int remainingSlots = 5 - alreadyEnrolledCount;
+            // Check the current number of enrolled courses
+            var currentEnrollmentsCount = await _context.Enrollments
+                .Where(e => e.StudentId == studentId && e.Status == EnrollmentStatus.Enrolled)
+                .CountAsync();
 
-            if (SelectedCourseIds.Count > remainingSlots)
+            if (currentEnrollmentsCount + SelectedCourseIds.Count > 5)
             {
-                TempData["Message"] = $"You can only enroll in {remainingSlots} more course(s).";
+                TempData["Message"] = "You cannot enroll in more than 5 courses at a time.";
                 return RedirectToPage();
             }
 
-            // Begin transaction for atomicity
             using (var transaction = await _context.Database.BeginTransactionAsync())
             {
                 try
                 {
-                    // Enroll in selected courses
                     foreach (var courseId in SelectedCourseIds)
                     {
                         bool alreadyEnrolled = await _context.Enrollments.AnyAsync(e =>
@@ -125,7 +122,7 @@ namespace StudentPortal.Pages.Student
                         }
                     }
 
-                    // Calculate the total amount
+                    // Total course fees
                     decimal totalAmount = 0;
                     foreach (var courseId in SelectedCourseIds)
                     {
@@ -136,21 +133,18 @@ namespace StudentPortal.Pages.Student
                         }
                     }
 
-                    // Check if there is an existing invoice for the student
                     var existingInvoice = await _context.Invoices
                         .Where(i => i.StudentId == studentId && i.Status == InvoiceStatus.Pending)
                         .FirstOrDefaultAsync();
 
                     if (existingInvoice != null)
                     {
-                        // Update the existing invoice
                         existingInvoice.AmountDue += totalAmount;
                         existingInvoice.FinalAmount += totalAmount;
                         _context.Invoices.Update(existingInvoice);
                     }
                     else
                     {
-                        // Create a new invoice if none exists
                         var invoice = new Invoice
                         {
                             StudentId = studentId,
@@ -164,10 +158,11 @@ namespace StudentPortal.Pages.Student
                         _context.Invoices.Add(invoice);
                     }
 
-                    // Save changes within the transaction
-                    await _context.SaveChangesAsync();
+                    // Mark student as enrolled for this session
+                    student.HasEnrolledThisSession = true;
+                    _context.Students.Update(student);
 
-                    // Commit the transaction to make the changes permanent
+                    await _context.SaveChangesAsync();
                     await transaction.CommitAsync();
 
                     TempData["Message"] = "Successfully enrolled in selected courses and invoice updated!";
@@ -175,7 +170,6 @@ namespace StudentPortal.Pages.Student
                 }
                 catch (Exception)
                 {
-                    // Rollback transaction if something goes wrong
                     await transaction.RollbackAsync();
                     TempData["Message"] = "An error occurred while processing your enrollment. Please try again.";
                     return RedirectToPage();
@@ -183,14 +177,10 @@ namespace StudentPortal.Pages.Student
             }
         }
 
-
-
         private int GetCurrentStudentId()
         {
             var claim = User.FindFirst("StudentId")?.Value;
             return int.Parse(claim);
         }
     }
-
 }
-

@@ -1,0 +1,58 @@
+﻿@page
+@model StudentPortal.Pages.Admin.ManageClashesModel
+@using StudentPortal.Models
+
+<div class="min-h-screen bg-[#1A1A1A] text-white p-8">
+    <h1 class="text-3xl font-bold mb-6">Manage Timetable Clashes</h1>
+
+    @if (TempData["StatusMessage"] != null)
+    {
+        <div class="mb-4 p-3 rounded bg-green-600 text-white">
+            @TempData["StatusMessage"]
+        </div>
+    }
+
+    <table class="w-full table-auto border-collapse text-white">
+        <thead>
+            <tr class="bg-[#333] text-left">
+                <th class="p-3">Student ID</th>
+                <th class="p-3">Course Code</th>
+                <th class="p-3">Preferred Day</th>
+                <th class="p-3">Preferred Time Slot</th>
+                <th class="p-3">Remarks</th>
+                <th class="p-3">Date Submitted</th>
+                <th class="p-3">Acknowledged</th>
+                <th class="p-3">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var report in Model.ClashReports)
+            {
+                <tr class="border-t border-gray-700">
+                    <td class="p-3">@report.Student.StudentId</td>
+                    <td class="p-3">@report.PreferredCourse</td>
+                    <td class="p-3">@report.PreferredDay</td>
+                    <td class="p-3">@report.PreferredTimeSlot</td>
+                    <td class="p-3">@report.Remarks</td>
+                    <td class="p-3">@report.DateSubmitted.ToString("g")</td>
+                    <td class="p-3">@report.IsNoted</td>
+                    <td class="p-3">
+                        @if (!report.IsNoted)
+                        {
+                            <form method="post">
+                                <input type="hidden" name="reportId" value="@report.Id" />
+                                <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1 px-3 rounded">
+                                    Mark as Noted
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="text-green-400 font-semibold">Noted</span>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

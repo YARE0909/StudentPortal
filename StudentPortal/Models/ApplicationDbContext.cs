@@ -20,6 +20,7 @@ namespace StudentPortal.Models
         public DbSet<PaymentHistory> PaymentHistories { get; set; }
         public DbSet<Invoice> Invoices { get; set; }
         public DbSet<Admin> Admins { get; set; }
+        public DbSet<TimetableConflictReport> TimetableConflictReports { get; set; }
 
         public DbSet<RegistrationPeriod> RegistrationPeriods { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)

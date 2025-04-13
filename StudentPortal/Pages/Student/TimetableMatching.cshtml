@@ -1,0 +1,79 @@
+﻿@page
+@model StudentPortal.Pages.Student.TimetableMatchingModel
+
+<div class="min-h-screen bg-[#1A1A1A] text-white p-8">
+    <h1 class="text-4xl font-bold text-center mb-8">Timetable Matching</h1>
+
+    <!-- Display Success or Info Message -->
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="mb-6 p-4 rounded bg-green-600 text-white font-semibold text-center">
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    @if (TempData["StudentIdFetched"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["StudentIdFetched"]
+        </div>
+    }
+
+    <!-- Form Section -->
+    <div class="w-full bg-[#292929] p-6 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-center mb-6">Submit Timetable Clash</h2>
+
+        <form method="post" class="space-y-4">
+            <div>
+                <label for="Course" class="block font-medium mb-1">Preferred Course</label>
+                <select id="Course" name="PreferredCourse" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" required>
+                    <option value="">Select a course</option>
+                    @foreach (var course in Model.EnrolledCourses)
+                    {
+                        <option value="@course.CourseCode">@course.CourseName (@course.CourseCode)</option>
+                    }
+                </select>
+                <span class="text-red-400 text-sm">@ViewData["CourseError"]</span>
+            </div>
+
+            <div>
+                <label for="Day" class="block font-medium mb-1">Preferred Day</label>
+                <select id="Day" name="PreferredDay" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" required>
+                    <option value="">Select a day</option>
+                    <option value="Monday">Monday</option>
+                    <option value="Tuesday">Tuesday</option>
+                    <option value="Wednesday">Wednesday</option>
+                    <option value="Thursday">Thursday</option>
+                    <option value="Friday">Friday</option>
+                </select>
+            </div>
+
+            <div>
+                <label for="TimeSlot" class="block font-medium mb-1">Preferred Time Slot</label>
+                <select id="TimeSlot" name="PreferredTimeSlot" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" required>
+                    <option value="">Select a time slot</option>
+                    @for (int i = 8; i <= 18; i++)
+                    {
+                        var hour = i % 12 == 0 ? 12 : i % 12;
+                        var ampm = i < 12 ? "AM" : "PM";
+                        var time = $"{hour}:00 {ampm}";
+                        <option value="@time">@time</option>
+                    }
+                </select>
+            </div>
+
+            <div>
+                <label for="Remarks" class="block font-medium mb-1">Remarks</label>
+                <textarea id="Remarks" name="Remarks" class="w-full bg-[#3C3C3C] text-white border border-gray-600 rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-400" rows="4"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
+                Submit Timetable Clash
+            </button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

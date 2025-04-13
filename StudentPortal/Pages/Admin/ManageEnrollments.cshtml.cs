@@ -216,14 +216,13 @@ namespace StudentPortal.Pages.Admin
 
                 if (invoice != null)
                 {
-                    // Step 4: Get the course cost and update the invoice
                     var courseCost = enrollment.Course.CourseCost;
 
                     // Subtract the course cost from the AmountDue
                     invoice.AmountDue = invoice.AmountDue - courseCost;
 
-                    // Optionally, update the FinalAmount if needed (depends on your logic)
-                    invoice.FinalAmount = invoice.AmountDue;
+                    // Ensure the FinalAmount does not go below zero
+                    invoice.FinalAmount = Math.Max(0, invoice.AmountDue);
 
                     // Save the changes to the invoice
                     _context.Invoices.Update(invoice);
