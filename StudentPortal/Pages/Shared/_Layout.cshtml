@@ -113,7 +113,10 @@
     <!-- Header -->
     <header class="bg-[#292929] text-white py-4 px-6">
         <div class="container mx-auto flex justify-between items-center">
-            <a class="text-xl font-bold text-white hover:text-fuchsia-400 transition" asp-area="" >
+            <!-- Dynamic link for EduSphere based on user role -->
+            <a class="text-xl font-bold text-white hover:text-fuchsia-400 transition">
+          
+              
                 EduSphere
             </a>
             <nav class="space-x-6 hidden sm:block">
@@ -124,14 +127,19 @@
                         <header>
                             <nav>
                                 <ul>
-                                    
+                                    <li class="dropdown">
+                                        <a href="#">Dashboard<span style="font-size: 0.8em;">&#9660;</span></a>
+                                        <ul class="dropdown-content">
+                                            <li><a href="/Dashboard/AdminDashboard">back to Dashboard</a></li>
+                                        </ul>
+                                    </li>
                                     <li class="dropdown">
                                         <a href="#">Online Enrollment <span style="font-size: 0.8em;">&#9660;</span></a>
                                         <ul class="dropdown-content">
                                             <li><a href="/Admin/ManageEnrollments">Manage Enrollments</a></li>
                                             <li><a href="/Admin/ManageCourses">Manage Courses</a></li>
                                             <li><a href="/Admin/RegistrationSession">Open/Close Sessions</a></li>
-                                            
+
                                         </ul>
                                     </li>
                                     <li class="dropdown">
@@ -147,13 +155,14 @@
                                         <ul class="dropdown-content">
                                             <li><a href="/Admin/ManageInvoices">Manage Invoices</a></li>
                                             <li><a href="/Admin/ManagePayments">Manage Payments</a></li>
+
                                         </ul>
                                     </li>
                                     <li class="dropdown">
                                         <a href="#">Students<span style="font-size: 0.8em;">&#9660;</span></a>
                                         <ul class="dropdown-content">
                                             <li><a href="/Admin/ManageStudents">Manage Students</a></li>
-                                            
+
                                         </ul>
                                     </li>
                                     <li class="dropdown">
@@ -163,8 +172,10 @@
                                             <li><a href="/Admin/ViewClashing">View Clashing</a></li>
                                         </ul>
                                     </li>
-                                    
-                                    <li style="float:right;"><a href="Account/AdminLogout" class="logout-button">Logout</a></li>
+
+                                    <li style="float:right;">
+                                        <a href="/Account/AdminLogout" class="logout-button">Logout</a>
+                                    </li>
                                 </ul>
                             </nav>
                         </header>
@@ -174,7 +185,12 @@
                         <header>
                             <nav>
                                 <ul>
-
+                                    <li class="dropdown">
+                                        <a href="#">Dashboard<span style="font-size: 0.8em;">&#9660;</span></a>
+                                        <ul class="dropdown-content">
+                                            <li><a href="/Student/Dashboard">Dashboard</a></li>
+                                        </ul>
+                                    </li>
                                     <li class="dropdown">
                                         <a href="#">Online Enrollment <span style="font-size: 0.8em;">&#9660;</span></a>
                                         <ul class="dropdown-content">
@@ -187,7 +203,7 @@
                                         <a href="#">Enquiries <span style="font-size: 0.8em;">&#9660;</span></a>
                                         <ul class="dropdown-content">
                                             <li><a href="/Student/MakeEnquiry">Make An Enquiry</a></li>
-                                            <li><a href="/Student/TimetableMatching">timetable Matching</a></li>
+                                            <li><a href="/Student/TimetableMatching">Timetable Matching</a></li>
                                             <li><a href="/Student/TimetableClashes">View Timetable Request</a></li>
                                             <li><a href="/Student/EvaluateCourse">Evaluate Courses</a></li>
                                         </ul>
@@ -196,6 +212,7 @@
                                         <a href="#">Statement <span style="font-size: 0.8em;">&#9660;</span></a>
                                         <ul class="dropdown-content">
                                             <li><a href="/Student/ViewTimetable">View Timetable</a></li>
+                                            <li><a href="/Payments/StudentStatement">View Student Statement</a></li>
                                         </ul>
                                     </li>
                                     <li class="dropdown">
@@ -212,7 +229,9 @@
                                         </ul>
                                     </li>
 
-                                    <li style="float:right;"><a href="Account/Logout" class="logout-button">Logout</a></li>
+                                    <li style="float:right;">
+                                        <a href="/Account/StudentLogout" class="logout-button">Logout</a>
+                                    </li>
                                 </ul>
                             </nav>
                         </header>
