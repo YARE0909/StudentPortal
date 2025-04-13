@@ -125,27 +125,44 @@ namespace StudentPortal.Pages.Student
                         }
                     }
 
-                    // Generate Invoice
+                    // Calculate the total amount
                     decimal totalAmount = 0;
                     foreach (var courseId in SelectedCourseIds)
                     {
                         var course = await _context.Courses.FindAsync(courseId);
                         if (course != null)
                         {
-                            totalAmount += course.CourseCost; // Using CourseCost for invoice calculation
+                            totalAmount += course.CourseCost;
                         }
                     }
 
-                    var invoice = new Invoice
+                    // Check if there is an existing invoice for the student
+                    var existingInvoice = await _context.Invoices
+                        .Where(i => i.StudentId == studentId && i.Status == InvoiceStatus.Pending)
+                        .FirstOrDefaultAsync();
+
+                    if (existingInvoice != null)
                     {
-                        StudentId = studentId,
-                        AmountDue = totalAmount,
-                        FinalAmount = totalAmount,
-                        Adjustment = 0,
-                        Status = InvoiceStatus.Pending,
-                        IssueDate = DateTime.Now
-                    };
-                    _context.Invoices.Add(invoice);
+                        // Update the existing invoice
+                        existingInvoice.AmountDue += totalAmount;
+                        existingInvoice.FinalAmount += totalAmount;
+                        _context.Invoices.Update(existingInvoice);
+                    }
+                    else
+                    {
+                        // Create a new invoice if none exists
+                        var invoice = new Invoice
+                        {
+                            StudentId = studentId,
+                            AmountDue = totalAmount,
+                            FinalAmount = totalAmount,
+                            Adjustment = 0,
+                            Status = InvoiceStatus.Pending,
+                            IssueDate = DateTime.Now
+                        };
+
+                        _context.Invoices.Add(invoice);
+                    }
 
                     // Save changes within the transaction
                     await _context.SaveChangesAsync();
@@ -153,7 +170,7 @@ namespace StudentPortal.Pages.Student
                     // Commit the transaction to make the changes permanent
                     await transaction.CommitAsync();
 
-                    TempData["Message"] = "Successfully enrolled in selected courses and invoice generated!";
+                    TempData["Message"] = "Successfully enrolled in selected courses and invoice updated!";
                     return RedirectToPage();
                 }
                 catch (Exception)
@@ -165,6 +182,7 @@ namespace StudentPortal.Pages.Student
                 }
             }
         }
+
 
 
         private int GetCurrentStudentId()
