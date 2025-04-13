@@ -36,7 +36,17 @@ namespace StudentPortal.Pages.Admin
 
         public async Task OnGetAsync()
         {
-            await LoadDataAsync();
+            int? studentId = null;
+
+            // Check if the studentId filter is provided in the query string
+            if (Request.Query.ContainsKey("studentId") &&
+                int.TryParse(Request.Query["studentId"], out var parsedStudentId))
+            {
+                studentId = parsedStudentId;
+            }
+
+            // Load enrollments, possibly filtered by studentId
+            await LoadDataAsync(studentId);
         }
 
         public async Task<IActionResult> OnPostEnrollAsync()
@@ -128,24 +138,35 @@ namespace StudentPortal.Pages.Admin
             return RedirectToPage();
         }
 
-        private async Task LoadDataAsync()
+        private async Task LoadDataAsync(int? studentId = null)
         {
-            Enrollments = await _context.Enrollments
+            var enrollmentsQuery = _context.Enrollments
                 .Include(e => e.Student)
                 .Include(e => e.Course)
-                .ToListAsync();
+                .AsQueryable();
 
+            // Filter by studentId if provided
+            if (studentId.HasValue)
+            {
+                enrollmentsQuery = enrollmentsQuery.Where(e => e.StudentId == studentId.Value);
+            }
+
+            // Fetch the enrollments based on the filtered query
+            Enrollments = await enrollmentsQuery.ToListAsync();
+
+            // Load student and course options for the dropdowns
             StudentOptions = new SelectList(
-    await _context.Students
-        .Select(s => new
-        {
-            s.StudentId,
-            Display = s.StudentId + " - " + s.FirstName + " " + s.LastName
-        }).ToListAsync(),
-    "StudentId", "Display");
+                await _context.Students
+                    .Select(s => new
+                    {
+                        s.StudentId,
+                        Display = s.StudentId + " - " + s.FirstName + " " + s.LastName
+                    }).ToListAsync(),
+                "StudentId", "Display");
 
             CourseOptions = new SelectList(await _context.Courses.ToListAsync(), "CourseId", "CourseName");
 
+            // Initialize the NewEnrollment property if it's null
             NewEnrollment ??= new NewEnrollmentInputModel();
         }
     }

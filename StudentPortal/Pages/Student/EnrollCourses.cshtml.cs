@@ -17,6 +17,10 @@ namespace StudentPortal.Pages.Student
 
         public List<Course> AvailableCourses { get; set; } = new();
 
+        [BindProperty]
+        public List<int> SelectedCourseIds { get; set; } = new();
+
+
         public List<Course> EnrolledCourses { get; set; } = new();
 
         public async Task OnGetAsync()
@@ -39,43 +43,86 @@ namespace StudentPortal.Pages.Student
                 .ToListAsync();
         }
 
-        public async Task<IActionResult> OnPostEnrollAsync(int courseId)
+        public async Task<IActionResult> OnPostEnrollAsync()
         {
             int studentId = GetCurrentStudentId();
 
-            bool alreadyEnrolled = await _context.Enrollments.AnyAsync(e =>
-                e.StudentId == studentId && e.CourseId == courseId && e.Status == EnrollmentStatus.Enrolled);
+            // Get how many courses the student is already enrolled in
+            var alreadyEnrolledCount = await _context.Enrollments
+                .CountAsync(e => e.StudentId == studentId && e.Status == EnrollmentStatus.Enrolled);
 
-            if (alreadyEnrolled)
+            if (SelectedCourseIds == null || !SelectedCourseIds.Any())
             {
-                TempData["Message"] = "You are already enrolled in that course.";
+                TempData["Message"] = "Please select at least one course to enroll.";
                 return RedirectToPage();
             }
 
-            var enrollment = new Enrollment
+            int remainingSlots = 5 - alreadyEnrolledCount;
+
+            if (SelectedCourseIds.Count > remainingSlots)
+            {
+                TempData["Message"] = $"You can only enroll in {remainingSlots} more course(s).";
+                return RedirectToPage();
+            }
+
+            // Enroll in selected courses
+            foreach (var courseId in SelectedCourseIds)
+            {
+                bool alreadyEnrolled = await _context.Enrollments.AnyAsync(e =>
+                    e.StudentId == studentId && e.CourseId == courseId && e.Status == EnrollmentStatus.Enrolled);
+
+                if (!alreadyEnrolled)
+                {
+                    var enrollment = new Enrollment
+                    {
+                        StudentId = studentId,
+                        CourseId = courseId,
+                        EnrollmentDate = DateTime.Now,
+                        Status = EnrollmentStatus.Enrolled
+                    };
+
+                    var historyEntry = new AddDropHistory
+                    {
+                        StudentId = studentId,
+                        CourseId = courseId,
+                        ActionType = ActionType.Added,
+                        ActionDate = DateTime.Now
+                    };
+
+                    _context.Enrollments.Add(enrollment);
+                    _context.AddDropHistories.Add(historyEntry);
+                }
+            }
+
+            // Generate Invoice (if needed)
+            decimal totalAmount = 0;
+            foreach (var courseId in SelectedCourseIds)
+            {
+                var course = await _context.Courses.FindAsync(courseId);
+                if (course != null)
+                {
+                    totalAmount += course.CourseCost; // Using CourseCost for invoice calculation
+                }
+            }
+
+            var invoice = new Invoice
             {
                 StudentId = studentId,
-                CourseId = courseId,
-                EnrollmentDate = DateTime.Now,
-                Status = EnrollmentStatus.Enrolled
+                AmountDue = totalAmount,
+                FinalAmount = totalAmount,
+                Adjustment = 0,
+                Status = InvoiceStatus.Pending,
+                IssueDate = DateTime.Now
             };
+            _context.Invoices.Add(invoice);
+            await _context.SaveChangesAsync(); // Save invoice to get InvoiceId
 
-            var historyEntry = new AddDropHistory
-            {
-                StudentId = studentId,
-                CourseId = courseId,
-                ActionType = ActionType.Added,
-                ActionDate = DateTime.Now
-            };
-            _context.AddDropHistories.Add(historyEntry);
-
-
-            _context.Enrollments.Add(enrollment);
-            await _context.SaveChangesAsync();
-
-            TempData["Message"] = "Successfully enrolled in the course!";
+            TempData["Message"] = "Successfully enrolled in selected courses and invoice generated!";
             return RedirectToPage();
         }
+
+
+
 
         private int GetCurrentStudentId()
         {
