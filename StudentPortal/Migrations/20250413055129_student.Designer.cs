@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using StudentPortal.Models;
 
@@ -10,9 +11,11 @@ using StudentPortal.Models;
 namespace StudentPortal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250413055129_student")]
+    partial class student
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.3");
@@ -259,20 +262,6 @@ namespace StudentPortal.Migrations
                     b.ToTable("PaymentHistories");
                 });
 
-            modelBuilder.Entity("StudentPortal.Models.RegistrationPeriod", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RegistrationPeriods");
-                });
-
             modelBuilder.Entity("StudentPortal.Models.Student", b =>
                 {
                     b.Property<int>("StudentId")
@@ -292,6 +281,10 @@ namespace StudentPortal.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime>("DateOfBirth")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Department")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
