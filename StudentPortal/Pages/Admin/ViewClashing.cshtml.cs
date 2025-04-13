@@ -30,7 +30,7 @@ namespace StudentPortal.Pages.Admin
             ShowConflictsOnly = showConflictsOnly;
             StudentId = studentId;
 
-            // Get all entries (or filter by student ID if provided)
+            // Start with all timetable entries
             var query = _context.Timetables
                 .Include(e => e.Course)
                 .AsQueryable();
@@ -43,14 +43,15 @@ namespace StudentPortal.Pages.Admin
                         .Any(e => e.StudentId == studentId && e.CourseId == t.CourseId && e.Status == EnrollmentStatus.Enrolled));
             }
 
+            // Get all timetable entries (possibly filtered by student ID)
             var allEntries = await query.ToListAsync();
 
+            // If we need to show only conflicts
             if (ShowConflictsOnly)
             {
-                // Filter only time slots that have > 1 entry (conflicts)
                 TimetableEntries = allEntries
                     .GroupBy(e => new { e.DayOfWeek, e.StartTime, e.EndTime })
-                    .Where(g => g.Count() > 1)
+                    .Where(g => g.Count() > 1) // Only conflicts where more than one course exists
                     .SelectMany(g => g)
                     .ToList();
             }

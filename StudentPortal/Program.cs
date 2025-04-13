@@ -19,6 +19,7 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
         options.Cookie.Name = "MyProjectAuth";
     });
 
+
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

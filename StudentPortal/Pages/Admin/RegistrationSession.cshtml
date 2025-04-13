@@ -1,0 +1,84 @@
+﻿@page
+@model StudentPortal.Pages.Admin.RegistrationSessionModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration Session Control - EduSphere</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .alert-message {
+            display: none;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+
+        .alert-success {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .alert-error {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-[#121212] flex items-center justify-center min-h-screen">
+    <div class="bg-[#1E1E1E] p-10 rounded-2xl shadow-lg w-full max-w-md text-white">
+        <h2 class="text-3xl font-bold mb-6 text-center">Registration Session</h2>
+
+        <!-- Alert message -->
+        <div class="alert-message" id="alert-message"></div>
+
+        <form method="post">
+            <div class="mb-6">
+                <p class="text-gray-300 text-sm mb-2">Current Status:</p>
+                <div class="flex items-center space-x-6">
+                    <label class="inline-flex items-center">
+                        <input type="radio" asp-for="IsActive" value="true" class="form-radio text-fuchsia-500" checked="@Model.IsActive" />
+                        <span class="ml-2">Open</span>
+                    </label>
+                    <label class="inline-flex items-center">
+                        <input type="radio" asp-for="IsActive" value="false" class="form-radio text-fuchsia-500" checked="@(!Model.IsActive)" />
+                        <span class="ml-2">Closed</span>
+                    </label>
+                </div>
+            </div>
+
+            <button type="submit" class="w-full p-3 rounded-lg bg-fuchsia-500 hover:bg-fuchsia-600 text-white font-semibold transition duration-300">
+                Save Changes
+            </button>
+        </form>
+
+        <div class="text-center mt-6">
+            <a href="/Dashboard/AdminDashboard" class="text-fuchsia-500 hover:text-fuchsia-600 text-sm">← Back to Admin Dashboard</a>
+        </div>
+    </div>
+
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        @if (TempData["Message"] != null)
+        {
+            <text>
+                    // Show the success or error message based on TempData
+                    var alertMessage = document.getElementById('alert-message');
+                    alertMessage.textContent = '@TempData["Message"]';
+                    alertMessage.classList.add('alert-success');
+                    alertMessage.style.display = 'block';
+            </text>
+        }
+    </script>
+</body>
+</html>

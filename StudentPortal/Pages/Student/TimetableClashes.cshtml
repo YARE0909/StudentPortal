@@ -1,0 +1,53 @@
+﻿@page
+@model StudentPortal.Pages.Student.TimetableClashesModel
+@{
+}
+
+
+<div class="min-h-screen bg-[#1A1A1A] text-white p-8">
+    <h1 class="text-4xl font-bold text-center mb-8">Timetable Clash History</h1>
+
+    <!-- Display any success or info messages -->
+    @if (TempData["Message"] != null)
+    {
+        <div class="mb-6 p-4 rounded bg-green-600 text-white font-semibold text-center">
+            @TempData["Message"]
+        </div>
+    }
+
+    <!-- Display timetable clashes -->
+    <div class="bg-[#292929] p-6 rounded-lg shadow-lg">
+        <h2 class="text-3xl font-bold text-center mb-6">Clashes Reported</h2>
+
+        @if (Model.TimetableClashes.Any())
+        {
+            <table class="table-auto w-full text-left text-white">
+                <thead>
+                    <tr>
+                        <th class="p-2">Course ID</th>
+                        <th class="p-2">Preferred Day</th>
+                        <th class="p-2">Preferred Time Slot</th>
+                        <th class="p-2">Remarks</th>
+                        <th class="p-2">Acknowledgement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var clash in Model.TimetableClashes)
+                    {
+                        <tr>
+                            <td class="p-2">@clash.PreferredCourse</td>
+                            <td class="p-2">@clash.PreferredDay</td>
+                            <td class="p-2">@clash.PreferredTimeSlot</td>
+                            <td class="p-2">@clash.Remarks</td>
+                            <td class="p-2">@clash.IsNoted</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p class="text-center text-gray-400">No timetable clashes reported yet.</p>
+        }
+    </div>
+</div>

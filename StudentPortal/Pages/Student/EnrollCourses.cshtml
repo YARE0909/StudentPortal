@@ -7,46 +7,62 @@
 <div class="bg-[#1A1A1A] text-white p-8">
     <h1 class="text-4xl font-bold text-center mb-8">Enroll in Courses</h1>
 
-    @if (TempData["Message"] != null)
+    <!-- Display Message if Registration is Open or Closed -->
+    @if (!Model.IsRegistrationOpen)
     {
-        <div class="mb-6 p-4 rounded bg-green-600 text-white font-semibold text-center">
-            @TempData["Message"]
-        </div>
-    }
-
-    <!-- Available Courses Section -->
-    @if (Model.AvailableCourses.Any())
-    {
-        <h2 class="text-3xl font-bold mb-4">Available Courses</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-            @foreach (var course in Model.AvailableCourses)
-            {
-                <div class="bg-[#292929] rounded-xl shadow-lg p-6 flex flex-col justify-between">
-                    <div>
-                        <h2 class="text-2xl font-bold mb-2">@course.CourseName</h2>
-                        <p class="text-gray-300 mb-1"><strong>Code:</strong> @course.CourseCode</p>
-                        <p class="text-gray-300 mb-1"><strong>Department:</strong> @course.Department</p>
-                        <p class="text-gray-300 mb-2"><strong>Credit Hours:</strong> @course.CreditHours</p>
-                        <p class="text-gray-400 text-sm">@course.Description</p>
-                    </div>
-                    <form method="post" asp-page-handler="Enroll" class="mt-4">
-                        <input type="hidden" name="courseId" value="@course.CourseId" />
-                        <button type="submit"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition-colors">
-                            Enroll
-                        </button>
-                    </form>
-                </div>
-            }
+        <div class="mb-6 p-4 rounded bg-red-600 text-white font-semibold text-center">
+            The registration session is closed. You cannot enroll in courses at this time.
         </div>
     }
     else
     {
-        <p class="text-center text-gray-400 mb-12">You are already enrolled in all available courses.</p>
+        @if (TempData["Message"] != null)
+        {
+            <div class="mb-6 p-4 rounded bg-green-600 text-white font-semibold text-center">
+                @TempData["Message"]
+            </div>
+        }
+
+        <!-- Available Courses Section (Only visible when registration is open) -->
+        @if (Model.AvailableCourses.Any())
+        {
+            <form method="post" asp-page-handler="Enroll">
+                <h2 class="text-3xl font-bold mb-4">Available Courses</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+                    @foreach (var course in Model.AvailableCourses)
+                    {
+                        <div class="bg-[#292929] rounded-xl shadow-lg p-6 flex flex-col justify-between">
+                            <div>
+                                <h2 class="text-2xl font-bold mb-2">@course.CourseName</h2>
+                                <p class="text-gray-300 mb-1"><strong>Code:</strong> @course.CourseCode</p>
+                                <p class="text-gray-300 mb-1"><strong>Department:</strong> @course.Department</p>
+                                <p class="text-gray-300 mb-2"><strong>Credit Hours:</strong> @course.CreditHours</p>
+                                <p class="text-gray-400 text-sm">@course.Description</p>
+                            </div>
+                            <div class="mt-4">
+                                <input type="checkbox" name="SelectedCourseIds" value="@course.CourseId" class="mr-2">
+                                <label>Select this course</label>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="text-center mb-12">
+                    <button type="submit"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded text-lg transition-colors">
+                        Enroll Me
+                    </button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <p class="text-center text-gray-400 mb-12">You are already enrolled in all available courses.</p>
+        }
     }
 
-    <!-- Enrolled Courses Section -->
-    <h2 class="text-3xl font-bold mb-4">Your Enrolled Courses</h2>
+    <!-- Enrolled Courses Section (Always visible) -->
+    <h2 class="text-3xl font-bold mb-4">Your Enrolled Courses (5 subjects Only)</h2>
     @if (Model.EnrolledCourses.Any())
     {
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

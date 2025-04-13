@@ -3,28 +3,38 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using StudentPortal.Models;
+using System.Linq;
 
 namespace StudentPortal.Pages.Admin
 {
     [Authorize(Roles = "Admin,Staff")]
     public class CourseEvaluationsModel : PageModel
     {
-        public ApplicationDbContext _context { get; set; }
-        
+        private readonly ApplicationDbContext _context;
+
         public StudentEvaluation[] CourseEvaluations { get; set; }
+
+        [BindProperty(SupportsGet = true)]
+        public string SearchTerm { get; set; }
 
         public CourseEvaluationsModel(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public void OnGetAsync()
+        public void OnGet()
         {
-            // Fetch all course evaluations from the database
-            CourseEvaluations = _context.StudentEvaluations
+            var query = _context.StudentEvaluations
                 .Include(e => e.Student)
                 .Include(e => e.Course)
-                .ToArray();
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(SearchTerm))
+            {
+                query = query.Where(e => e.Course.CourseCode.Contains(SearchTerm));
+            }
+
+            CourseEvaluations = query.ToArray();
         }
     }
 }

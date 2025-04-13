@@ -1,0 +1,85 @@
+﻿@page
+@model StudentStatementModel
+@{
+    ViewData["Title"] = "My Student Statement";
+}
+@using StudentPortal.Models
+
+<div class="min-h-screen bg-[#1A1A1A] text-white p-6">
+    <h2 class="text-2xl font-semibold mb-4">My Student Statement</h2>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Student Info Section -->
+        <div class="lg:col-span-2">
+            <div class="bg-[#292929] p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold mb-4">Student Information</h3>
+                <div class="space-y-2">
+                    <p><strong>Student ID:</strong> @Model.Student.StudentId</p>
+                    <p><strong>Name:</strong> @Model.Student.FirstName @Model.Student.LastName</p>
+                    <p><strong>Email:</strong> @Model.Student.Email</p>
+                    <p><strong>Phone:</strong> @(Model.Student.Phone ?? "-")</p>
+                    <p><strong>Enrollment Status:</strong> @(Model.Student.HasEnrolledThisSession ? "Enrolled" : "Not Enrolled")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Course List Section -->
+        <div class="lg:col-span-2 mt-6 lg:mt-0">
+            <div class="bg-[#292929] p-6 rounded-lg shadow-lg">
+                <h3 class="text-xl font-semibold mb-4">Enrolled Courses</h3>
+
+                @if (Model.ActiveEnrollments.Any())
+                {
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-[#1A1A1A] text-white rounded-lg table-auto">
+                            <thead class="bg-[#333333] text-left">
+                                <tr>
+                                    <th class="p-3 font-medium">Course Code</th>
+                                    <th class="p-3 font-medium">Course Name</th>
+                                    <th class="p-3 font-medium">Department</th>
+                                    <th class="p-3 font-medium">Credit Hours</th>
+                                    <th class="p-3 font-medium">Cost</th>
+                                    <th class="p-3 font-medium">Enrollment Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var enrollment in Model.ActiveEnrollments)
+                                {
+                                    <tr class="border-t border-[#3C3C3C] hover:bg-[#252525] transition">
+                                        <td class="p-3">@enrollment.Course.CourseCode</td>
+                                        <td class="p-3">@enrollment.Course.CourseName</td>
+                                        <td class="p-3">@enrollment.Course.Department</td>
+                                        <td class="p-3">@enrollment.Course.CreditHours</td>
+                                        <td class="p-3">@enrollment.Course.CourseCost.ToString("C")</td>
+                                        <td class="p-3">@enrollment.EnrollmentDate.ToShortDateString()</td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr class="bg-[#333333]">
+                                    <td colspan="4" class="p-3 text-end text-white font-bold">Total Cost:</td>
+                                    <td colspan="2" class="p-3 text-white font-bold">@Model.TotalCost.ToString("C")</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+
+                    <!-- Pay Button -->
+                    <div class="mt-6 text-center">
+                        <a href="/Payments/MakePayment" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition-colors duration-150">
+                            Pay Now
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No active course enrollments found.</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
