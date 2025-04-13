@@ -135,7 +135,15 @@ namespace StudentPortal.Pages.Admin
                 .Include(e => e.Course)
                 .ToListAsync();
 
-            StudentOptions = new SelectList(await _context.Students.ToListAsync(), "StudentId", "FirstName");
+            StudentOptions = new SelectList(
+    await _context.Students
+        .Select(s => new
+        {
+            s.StudentId,
+            Display = s.StudentId + " - " + s.FirstName + " " + s.LastName
+        }).ToListAsync(),
+    "StudentId", "Display");
+
             CourseOptions = new SelectList(await _context.Courses.ToListAsync(), "CourseId", "CourseName");
 
             NewEnrollment ??= new NewEnrollmentInputModel();
